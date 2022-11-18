@@ -31,7 +31,7 @@ namespace Identity
                 opts.UseSqlServer(configuration["ConnectionStrings:DefaultConnectionString"]);
             });
 
-            services.AddIdentity<AppUser,IdentityRole>().AddEntityFrameworkStores<AppIdentityDbContext>(); //identity kullanýcaðýmýzý belli ediyoruz.
+            services.AddIdentity<AppUser,AppRole>().AddEntityFrameworkStores<AppIdentityDbContext>(); //identity kullanýcaðýmýzý belli ediyoruz.
 
 
 
