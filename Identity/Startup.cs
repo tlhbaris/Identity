@@ -36,20 +36,18 @@ namespace Identity
             {
 
 
-                opts.User.RequireUniqueEmail = true;
+                opts.User.RequireUniqueEmail = true;                //kullanýcý doðrulama ayarlarý
                 opts.User.AllowedUserNameCharacters = "abcçdefghýijklmnoöpqrsþtuüvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._";
-
-
-
 
 
                 opts.Password.RequiredLength = 4;
                 opts.Password.RequireNonAlphanumeric = false;
-                opts.Password.RequireLowercase= false;              // þifre doðrulama ayarlarý
-                opts.Password.RequireUppercase= false;
-                opts.Password.RequireDigit= false;
+                opts.Password.RequireLowercase = false;              // þifre doðrulama ayarlarý
+                opts.Password.RequireUppercase = false;
+                opts.Password.RequireDigit = false;
 
             }).AddPasswordValidator<CustomPasswordValidator>() //custom password validator ekleniyor.
+              .AddUserValidator<CustomUserValidator>()         // custom user validator ekleniyor
               .AddEntityFrameworkStores<AppIdentityDbContext>(); //identity kullanýcaðýmýzý belli ediyoruz.
 
 
