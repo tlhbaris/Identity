@@ -32,6 +32,27 @@ namespace Identity
                 opts.UseSqlServer(configuration["ConnectionStrings:DefaultConnectionString"]);
             });
 
+
+            CookieBuilder cookieBuilder = new CookieBuilder();
+
+            cookieBuilder.Name = "MyBlog";
+            cookieBuilder.HttpOnly = false;
+            cookieBuilder.Expiration = System.TimeSpan.FromDays(60); // cookie geçerlilik süresi
+            cookieBuilder.SameSite = SameSiteMode.Lax;  //Baþka site üzerinden cookie gönderilmesini engellenip(Strict) engellenmemesi(Lax) için
+            cookieBuilder.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+
+
+            services.ConfigureApplicationCookie(opts =>
+            {
+                opts.LoginPath = new PathString("/Home/Login");       //sadece üyelerin eriþeblieceði sayfalara girmek istediðinde yönlendirlicek sayfa
+                opts.Cookie = cookieBuilder;
+                opts.SlidingExpiration = true; // cookie geçerlilik süresinin yarýsýna geldiðinde uzatmasý için
+            });
+
+
+
+
+
             services.AddIdentity<AppUser, AppRole>(opts =>
             {
 
@@ -48,6 +69,7 @@ namespace Identity
 
             }).AddPasswordValidator<CustomPasswordValidator>() //custom password validator ekleniyor.
               .AddUserValidator<CustomUserValidator>()         // custom user validator ekleniyor
+              .AddErrorDescriber<CustomIdentityErrorDescriber>() 
               .AddEntityFrameworkStores<AppIdentityDbContext>(); //identity kullanýcaðýmýzý belli ediyoruz.
 
 
