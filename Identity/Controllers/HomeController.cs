@@ -56,10 +56,6 @@ namespace Identity.Controllers
                     }
                 }
 
-
-
-
-
             }
 
             return View(userViewModel);

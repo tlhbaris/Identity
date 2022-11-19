@@ -31,7 +31,15 @@ namespace Identity
                 opts.UseSqlServer(configuration["ConnectionStrings:DefaultConnectionString"]);
             });
 
-            services.AddIdentity<AppUser,AppRole>().AddEntityFrameworkStores<AppIdentityDbContext>(); //identity kullanýcaðýmýzý belli ediyoruz.
+            services.AddIdentity<AppUser, AppRole>(opts =>
+            {
+                opts.Password.RequiredLength = 4;
+                opts.Password.RequireNonAlphanumeric = false;
+                opts.Password.RequireLowercase= false;              // þifre doðrulama ayarlarý
+                opts.Password.RequireUppercase= false;
+                opts.Password.RequireDigit= false;
+
+            }).AddEntityFrameworkStores<AppIdentityDbContext>(); //identity kullanýcaðýmýzý belli ediyoruz.
 
 
 
