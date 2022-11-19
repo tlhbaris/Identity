@@ -1,3 +1,4 @@
+using Identity.CustomValidation;
 using Identity.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -39,7 +40,8 @@ namespace Identity
                 opts.Password.RequireUppercase= false;
                 opts.Password.RequireDigit= false;
 
-            }).AddEntityFrameworkStores<AppIdentityDbContext>(); //identity kullanýcaðýmýzý belli ediyoruz.
+            }).AddPasswordValidator<CustomPasswordValidator>() //custom password validator ekleniyor.
+              .AddEntityFrameworkStores<AppIdentityDbContext>(); //identity kullanýcaðýmýzý belli ediyoruz.
 
 
 
