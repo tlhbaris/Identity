@@ -33,26 +33,6 @@ namespace Identity
             });
 
 
-            CookieBuilder cookieBuilder = new CookieBuilder();
-
-            cookieBuilder.Name = "MyBlog";
-            cookieBuilder.HttpOnly = false;
-            cookieBuilder.Expiration = System.TimeSpan.FromDays(60); // cookie geçerlilik süresi
-            cookieBuilder.SameSite = SameSiteMode.Lax;  //Baþka site üzerinden cookie gönderilmesini engellenip(Strict) engellenmemesi(Lax) için
-            cookieBuilder.SecurePolicy = CookieSecurePolicy.SameAsRequest;
-
-
-            services.ConfigureApplicationCookie(opts =>
-            {
-                opts.LoginPath = new PathString("/Home/Login");       //sadece üyelerin eriþeblieceði sayfalara girmek istediðinde yönlendirlicek sayfa
-                opts.Cookie = cookieBuilder;
-                opts.SlidingExpiration = true; // cookie geçerlilik süresinin yarýsýna geldiðinde uzatmasý için
-            });
-
-
-
-
-
             services.AddIdentity<AppUser, AppRole>(opts =>
             {
 
@@ -69,31 +49,39 @@ namespace Identity
 
             }).AddPasswordValidator<CustomPasswordValidator>() //custom password validator ekleniyor.
               .AddUserValidator<CustomUserValidator>()         // custom user validator ekleniyor
-              .AddErrorDescriber<CustomIdentityErrorDescriber>() 
+              .AddErrorDescriber<CustomIdentityErrorDescriber>()
               .AddEntityFrameworkStores<AppIdentityDbContext>(); //identity kullanýcaðýmýzý belli ediyoruz.
 
 
+            CookieBuilder cookieBuilder = new CookieBuilder();
+
+            cookieBuilder.Name = "MyBlog";
+            cookieBuilder.HttpOnly = false;
+            cookieBuilder.MaxAge = System.TimeSpan.FromDays(60); // cookie geçerlilik süresi
+            cookieBuilder.SameSite = SameSiteMode.Lax;  //Baþka site üzerinden cookie gönderilmesini engellenip(Strict) engellenmemesi(Lax) için
+            cookieBuilder.SecurePolicy = CookieSecurePolicy.SameAsRequest;
 
 
+            services.ConfigureApplicationCookie(opts =>
+            {
+                opts.LoginPath = new PathString("/Home/Login");       //sadece üyelerin eriþeblieceði sayfalara girmek istediðinde yönlendirlicek sayfa
+                opts.Cookie = cookieBuilder;
+                opts.SlidingExpiration = true; // cookie geçerlilik süresinin yarýsýna geldiðinde uzatmasý için
+            });
 
 
+            services.AddMvc(options => options.EnableEndpointRouting = false);
             services.AddMvc();
         }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseDeveloperExceptionPage(); // bi hata aldýðýmýzda o hatayla ilgili açýklayýcý bilgiler sunuyor
             app.UseStatusCodePages(); // herhangi bir içerik dönmeyen sayfalarda bilgilendirci yazýlar dönüyor. 
             app.UseStaticFiles();
-            app.UseRouting();
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
-            });
             app.UseAuthentication();// identity i kullanabilmek için
+            app.UseMvcWithDefaultRoute();
+
+
 
 
 

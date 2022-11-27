@@ -5,8 +5,8 @@ namespace Identity.ViewModels
     public class UserViewModel
     {
 
-        [Required(ErrorMessage ="Kullanıcı ismi gereklidir.")]
-        [Display(Name ="Kullanıcı Adı")]
+        [Required(ErrorMessage = "Kullanıcı ismi gereklidir.")]
+        [Display(Name = "Kullanıcı Adı")]
         public string UserName { get; set; }
 
         [Display(Name = "Tel No")]
@@ -14,7 +14,7 @@ namespace Identity.ViewModels
 
         [Required(ErrorMessage = "Email adresi gereklidir.")]
         [Display(Name = "Email Adresiniz")]
-        [EmailAddress(ErrorMessage ="Email adresiniz doğru formatta değil")]
+        [EmailAddress(ErrorMessage = "Email adresiniz doğru formatta değil")]
         public string Email { get; set; }
 
 
